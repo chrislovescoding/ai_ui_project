@@ -1,0 +1,16 @@
+total_episodes_generated: 12
+num_everyday_episodes_scheduled: 10
+num_edge_case_episodes_scheduled: 2
+frames_per_episode: 30
+triplets_per_episode: 29
+window_size:
+- 256
+- 256
+button_rect_xywh: !!python/tuple
+- 78
+- 110
+- 100
+- 36
+generator_version: 1.0_initial
+generation_date: '2025-05-21 01:12:33'
+notes: Initial dataset generated with basic trajectories.

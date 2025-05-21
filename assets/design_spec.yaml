@@ -1,0 +1,47 @@
+# assets/design_spec.yaml
+
+window:
+  width: 256
+  height: 256
+  background_color_rgb: [220, 220, 220]
+
+button:
+  rect_xywh: [78, 110, 100, 36] # x, y, width, height
+  corner_radius: 5
+  label_text: "Click Me"
+  font_path: "assets/DejaVuSans.ttf" # Ensure this file exists
+  font_size_pt: 14
+  text_color_rgb: [255, 255, 255] # White
+  normal_fill_rgb: [80, 120, 200]   # Medium blue
+  hover_fill_rgb: [100, 150, 220]  # Lighter blue
+  pressed_fill_rgb: [60, 100, 180]  # Darker blue
+  border_width_px: 0 # No border
+
+static_text: # "Chris Lock"
+  content: "Chris Lock"
+  font_path: "assets/DejaVuSans.ttf"
+  font_size_pt: 10
+  color_rgb: [0, 0, 0] # Black
+  margin_bottom_px: 10 # From window bottom to text baseline
+  horizontal_alignment: "center"
+
+pressed_indicator_text: # "Pressed!"
+  content: "Pressed!"
+  font_path: "assets/DejaVuSans.ttf"
+  font_size_pt: 10
+  color_rgb: [0, 0, 0] # Black
+  margin_above_button_px: 8 # From button top to text bottom
+  horizontal_alignment_relative_to_button: "center"
+
+cursor:
+  sprite_path: "assets/cursor.png" # Ensure this file exists (e.g., 32x32 RGBA)
+  hotspot_offset_xy: [0, 0] # Relative to top-left of cursor sprite image
+  # Sprite dimensions will be read from the image file
+
+# For run_generation.py
+generation_params:
+  frames_per_episode: 30 # As per prompt
+  num_everyday_episodes: 10 # Reduced for quick testing; prompt: 250_000
+  num_edge_case_episodes: 2 # Reduced for quick testing; prompt: 50_000
+  output_dir_base: "data"
+  num_workers: 4 # For multiprocessing, adjust based on CPU cores
