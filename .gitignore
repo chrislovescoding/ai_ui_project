@@ -45,6 +45,3 @@ recon_epoch*.png
 pred_vs_gt.png
 rollout.gif
 
-# models/ folder: ignore everything except .pt weight files
-models/**
-!models/**/*.pt
