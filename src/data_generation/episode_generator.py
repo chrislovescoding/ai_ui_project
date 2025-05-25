@@ -32,19 +32,12 @@ def render_full_frame(config, ui_state_name, cursor_root_x, cursor_root_y):
     return image
 
 def generate_episode_triplets(episode_id, trajectory_callable, config):
-    """
-    Generates and saves all (prev_frame, cursor_mask, next_frame) triplets for an episode.
-    trajectory_callable: A function that when called (e.g. trajectory_callable(config)) returns a generator/iterator
-                         yielding (cursor_x, cursor_y, mouse_button_state_str)
-    """
     episode_dir = os.path.join(config.OUTPUT_DIR_BASE, f"ep_{episode_id:05d}")
     os.makedirs(episode_dir, exist_ok=True)
 
-    trajectory = trajectory_callable(config) # Get the iterator
+    trajectory = trajectory_callable(config)
 
-    # Initial frame setup
     try:
-        # Frame 0: Render it to be `prev_frame` for the first triplet
         curr_cursor_x, curr_cursor_y, curr_mouse_state = next(trajectory)
         curr_ui_state_name = state_logic.determine_ui_state(
             config, curr_cursor_x, curr_cursor_y, curr_mouse_state
@@ -56,49 +49,42 @@ def generate_episode_triplets(episode_id, trajectory_callable, config):
         print(f"Warning: Trajectory for episode {episode_id} yielded no frames.")
         return
 
-    # Loop for subsequent frames (0 to FRAMES_PER_EPISODE - 2 for triplets)
-    # We need total FRAMES_PER_EPISODE cursor states to make FRAMES_PER_EPISODE-1 triplets
-    # The loop below makes config.FRAMES_PER_EPISODE-1 triplets.
-    # Prompt says: "30 frames for everyday behaviour" -- this usually means 30 states, or 29 triplets.
-    # If it means 30 triplets, then trajectories need to yield 31 states.
-    # Let's assume 30 states from trajectory -> 29 triplets.
-    # The prompt's data section: "ep_xxxxx/{####_{prev,mask,next}.png}"
-    # If an episode has N frames (states), it has N-1 triplets.
-    # If 30 frames are rendered for an episode, indices 0..29.
-    # Triplet 0: prev=f0, next=f1. Triplet 28: prev=f28, next=f29. Total 29 triplets.
-    # So, trajectory should yield config.FRAMES_PER_EPISODE states.
-
     for frame_idx_for_triplet_output in range(config.FRAMES_PER_EPISODE - 1):
         try:
-            next_cursor_x, next_cursor_y, next_mouse_state = next(trajectory)
+            next_cursor_x, next_cursor_y, next_mouse_state = next(trajectory) # mouse_state for t+1
         except StopIteration:
-            # Trajectory ended sooner than FRAMES_PER_EPISODE.
-            # This can happen if trajectory generators are not careful about yielding enough frames.
-            # Or if FRAMES_PER_EPISODE is 1.
-            # print(f"Warning: Trajectory for ep {episode_id} ended at frame {frame_idx_for_triplet_output+1} "
-            #       f"instead of {config.FRAMES_PER_EPISODE}.")
-            break 
+            # print(f"Warning: Trajectory for ep {episode_id} ended early.") # Optional warning
+            break
 
-        # Generate Cursor Mask for next_frame's cursor position
-        cursor_mask_image = drawing_utils.generate_cursor_mask_image(
+        # Generate Positional Cursor Mask for next_frame's cursor position
+        # This uses your existing function, which is fine.
+        cursor_pos_mask_image = drawing_utils.generate_cursor_mask_image(
             config, next_cursor_x, next_cursor_y
         )
 
-        # Determine UI State for next_frame
+        # --- NEW: Generate Click State Mask for next_frame's mouse state ---
+        # This mask reflects `next_mouse_state` ("UP" or "DOWN")
+        click_state_mask_image = drawing_utils.generate_click_state_mask_image(
+            config, next_mouse_state  # Pass the mouse state for the next frame
+        )
+        # --- END NEW ---
+
         next_ui_state_name = state_logic.determine_ui_state(
             config, next_cursor_x, next_cursor_y, next_mouse_state
         )
-
-        # Render next_frame
         next_frame_image = render_full_frame(
             config, next_ui_state_name, next_cursor_x, next_cursor_y
         )
 
-        # Save Triplet
+        # Save Triplet (with updated mask filenames)
         frame_num_str = f"{frame_idx_for_triplet_output:04d}"
         prev_frame_image.save(os.path.join(episode_dir, f"{frame_num_str}_prev.png"))
-        cursor_mask_image.save(os.path.join(episode_dir, f"{frame_num_str}_mask.png"))
+        
+        # --- MODIFIED: Save both masks with new names ---
+        cursor_pos_mask_image.save(os.path.join(episode_dir, f"{frame_num_str}_cursor_pos_mask.png")) # Renamed from _mask.png
+        click_state_mask_image.save(os.path.join(episode_dir, f"{frame_num_str}_click_state_mask.png")) # New click state mask file
+        # --- END MODIFIED ---
+        
         next_frame_image.save(os.path.join(episode_dir, f"{frame_num_str}_next.png"))
 
-        # Update for next iteration
         prev_frame_image = next_frame_image

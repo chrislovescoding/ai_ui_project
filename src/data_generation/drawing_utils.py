@@ -88,3 +88,14 @@ def generate_cursor_mask_image(config, cursor_root_x, cursor_root_y):
     paste_pos = (int(cursor_root_x), int(cursor_root_y))
     mask_image.paste(cursor_sprite_mask, paste_pos) # Paste the binary mask
     return mask_image
+
+def generate_click_state_mask_image(config, mouse_button_state_str: str) -> Image.Image:
+    """
+    Generates a single-channel image representing the mouse button state.
+    The entire image is 255 (white) if mouse_button_state_str is "DOWN", 
+    and 0 (black) otherwise ("UP").
+    """
+    state_value = 255 if mouse_button_state_str == "DOWN" else 0
+    # Create a new single-channel 'L' mode image with the determined state value
+    click_state_image = Image.new('L', (config.WINDOW_WIDTH, config.WINDOW_HEIGHT), state_value)
+    return click_state_image

@@ -12,9 +12,9 @@ button:
   font_path: "assets/DejaVuSans.ttf" # Ensure this file exists
   font_size_pt: 14
   text_color_rgb: [255, 255, 255] # White
-  normal_fill_rgb: [80, 120, 200]   # Medium blue
-  hover_fill_rgb: [100, 150, 220]  # Lighter blue
-  pressed_fill_rgb: [60, 100, 180]  # Darker blue
+  normal_fill_rgb: [0, 102, 204]   # Medium blue
+  hover_fill_rgb: [0, 153, 255]  # Lighter blue
+  pressed_fill_rgb: [255, 51, 153]  # Darker blue
   border_width_px: 0 # No border
 
 static_text: # "Chris Lock"
@@ -40,8 +40,8 @@ cursor:
 
 # For run_generation.py
 generation_params:
-  frames_per_episode: 30 # As per prompt
-  num_everyday_episodes: 10 # Reduced for quick testing; prompt: 250_000
-  num_edge_case_episodes: 2 # Reduced for quick testing; prompt: 50_000
-  output_dir_base: "data"
-  num_workers: 4 # For multiprocessing, adjust based on CPU cores
+  frames_per_episode: 30 
+  num_everyday_episodes: 25_000
+  num_edge_case_episodes: 5_000
+  output_dir_base: "C:\\ai_ui_project\\data"
+  num_workers: 8
