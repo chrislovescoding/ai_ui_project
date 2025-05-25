@@ -45,3 +45,7 @@ recon_epoch*.png
 pred_vs_gt.png
 rollout.gif
 
+# Training logs & TensorBoard
+*.json
+logs_vae/
+**/events.out.tfevents.*
