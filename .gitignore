@@ -1,1 +1,50 @@
-/venv
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env
+.venv/
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python build/dist
+build/
+dist/
+*.egg-info/
+*.eggs/
+
+# Test / coverage
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Large data folders
+data/
+data_gifs/
+exhaustive_data/
+latent_triplets/
+
+# Generated visuals
+recon_epoch*.png
+pred_vs_gt.png
+rollout.gif
+
+# models/ folder: ignore everything except .pt weight files
+models/**
+!models/**/*.pt
