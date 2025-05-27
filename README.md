@@ -2,6 +2,14 @@
 
 A proof-of-concept project demonstrating a real-time AI that "imagines" and renders a graphical user interface frame-by-frame based solely on the previous frame, mouse position, and click state. Inspired by OasisAI's Minecraft world model, this system uses a simple autoencoder+predictor pipeline to generate UI frames without any hard-coded logic—behavior is entirely learned from training data. In the future, this approach could be extended to imagine multi-layered websites and complex interfaces from only a handful of design snapshots.
 
+## Demo
+
+Watch the AI-generated UI in action! The system learns to respond to mouse movements and clicks, generating realistic UI behavior frame-by-frame. In this demo, you can see the button responding to interactions, and even some fun "breaking" of the interface when pushed to its limits:
+
+![AI UI Demo](assets/demo.gif)
+
+*The AI learns UI behavior patterns from training data and generates frames in real-time based on cursor position and click state.*
+
 ---
 
 ## Features

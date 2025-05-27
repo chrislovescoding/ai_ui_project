@@ -49,5 +49,3 @@ rollout.gif
 *.json
 logs_vae/
 **/events.out.tfevents.*
-
-test.py
