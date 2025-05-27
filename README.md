@@ -159,3 +159,19 @@ python -m src.train_predictor \
 * **Generalized UI imagination** : scale beyond a single button to multi-layered websites, dynamic menus, and forms.
 * **Self-supervised pretraining** : learn from real UI screenshots to boost realism.
 * **Guided generation** : incorporate high-level user intents to steer frame-by-frame outputs.
+
+---
+
+## Under the Hood: The Weird and Wonderful
+
+Ok so I've been obsessing over some of the bizarre behaviors that emerged while building this thing:
+
+### Psychedelic latent drift
+Why do uniform background tiles develop these shifting RGB "blobs" over time? Turns out it's just small prediction errors accumulating. Each frame adds tiny imperfections in latent space and they compound into these trippy drifts. It's like watching the AI's uncertainty leak out as abstract art.
+
+### Cursor-anchored flatness
+This is the part that blew my mind—the cursor mask acts as a hard reset. Wherever the pointer lands, the model re-generates that tile crisply, overriding all the accumulated latent noise. So it stays flat and clean under your sprite while everything else might be drifting into psychedelic territory. Your mouse is literally an anchor of sanity.
+
+These aren't bugs, they're glimpses into how the thing actually "thinks".
+
+---
